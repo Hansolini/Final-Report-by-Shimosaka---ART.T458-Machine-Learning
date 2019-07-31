@@ -18,7 +18,7 @@ figure(1);
 clf;
 semilogy(0,0,'HandleVisibility','off');
 hold on; grid on;
-title('Proximal gradient of Lasso with varying $\lambda$');
+title('Proximal Gradient of Lasso with varying $\lambda$');
 xlabel('Iterations [t]');
 ylabel('$||w^{(t)} - \hat{w}||$');
 legend('interpreter','latex');
@@ -61,7 +61,7 @@ end
 
 figure(2);
 clf;
-plot(lambdas, w_hat_lambda);
+plot(lambdas, w_hat_lambda, 'lineWidt', 2);
 grid on;
 title('Regularization path for lasso');
 xlabel('$\lambda$');

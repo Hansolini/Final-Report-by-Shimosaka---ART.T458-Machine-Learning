@@ -33,21 +33,21 @@ w = [3;3;3;3];
 
 ll_history = [];
 w_history = [];
-lip = 0.25 * max(max(x))^2;
+lip = max(eig(x'*x + 2*lambda*eye(d)));
+alpha = lip^-1;
 lambda = 0.01;
 
 % Iterations
 tic
 for t = 1:num_iter
     posteriori = 1.0 ./ (1.0 + exp(-y .* x*w ));
-    grad =  1.0 / n * sum((-y).*x.*(1-posteriori))' + 2 * lambda * w;
+    grad = sum((-y).*x.*(1-posteriori))' + 2 * lambda * w;
     direction = -grad;
     
-    ll = 1.0/n  * sum(log(1.0 + exp(-y.* x*w))) + lambda * w'*w;
+    ll = sum(log(1.0 + exp(-y.* x*w))) + lambda * w'*w;
     
     ll_history = [ll_history ll];
-    w = w + 1.0 / sqrt(t) / lip * direction;
-
+    w = w + alpha * direction;
 end
 toc
 
@@ -61,29 +61,28 @@ plot(1:show_iter, ll_history(1:show_iter), 'bo-');
 title('Batch Gradient Descent method');
 xlabel('Iterations [t]');
 ylabel('$J(${\boldmath $w^{(t)}$}$)$');
-
- 
  
 %% 2. Newton method
 ll_n_history = [];
 ww_n_history = [];
-w = [3;3;3;3];
+w = [1;1;1;1];
 
 % Iterations
 tic
 for t = 1:num_iter
     posteriori = 1.0 ./ (1.0 + exp(-y .* x*w ));
-    grad =  1.0 / n * sum((-y).*x.*(1-posteriori))' + 2 * lambda * w;
-    hess = 1.0 / n * ((posteriori .* (1.0 - posteriori) .*x)'*x) + 2 * lambda*eye(length(w));
+    grad = sum((-y).*x.*(1-posteriori))' + 2 * lambda * w;
+    hess = ((posteriori .* (1.0 - posteriori) .*x)'*x) + 2 * lambda*eye(length(w));
     direction = - inv(hess)*grad;
-    
-    ll = 1.0/n  * sum(log(1.0 + exp(-y.* x*w))) + lambda * w'*w;
+        
+    ll = sum(log(1.0 + exp(-y.* x*w))) + lambda * w'*w;
     
     ll_n_history = [ll_n_history ll];
-    w = w + 1.0 / sqrt(t+10) * direction;
+    
+    alpha_t = 1.0/sqrt(t+10);
+    w = w + alpha_t * direction;
 end
 toc
-show_iter = 100;
 
 min_ll = min(min(ll_n_history), min(ll_history));
 

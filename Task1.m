@@ -29,11 +29,12 @@ drawnow;
 
 %% 1. Batch Gradient descent
 num_iter = 200;
+show_iter = 100;
 w = [3;3;3;3];
 
 ll_history = [];
 w_history = [];
-lip = max(eig(x'*x + 2*lambda*eye(d)));
+lip = 0.25*max(eig(x'*x + 2*lambda*eye(d)));
 alpha = lip^-1;
 lambda = 0.01;
 
@@ -52,7 +53,7 @@ end
 toc
 
 % Plot
-show_iter = 100;
+
 figure(2);
 clf;
 hold on; grid on;
@@ -87,7 +88,6 @@ toc
 min_ll = min(min(ll_n_history), min(ll_history));
 
 % Plot
-show_iter = 100;
 figure(3);
 clf;
 hold on; grid on;
@@ -98,7 +98,6 @@ xlabel('Iterations [t]');
 ylabel('$J(${\boldmath $w^{(t)}$}$)$');
 
 %% 3. Comparison
-show_iter = 100;
 figure(4);
 clf;
 semilogy(1:show_iter,abs(ll_history(1:show_iter) - min_ll), 'bo-');

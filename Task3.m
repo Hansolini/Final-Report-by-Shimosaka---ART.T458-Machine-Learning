@@ -51,7 +51,7 @@ xlabel('$w_1$')
 ylabel('$w_2$')
 zlabel('Hinge loss with regularization value')
 
-%% Copute K for the dual problem
+%% Compute K for the dual problem
 K = [];
 for i = 1:length(y)
     for j = 1:length(y)
@@ -88,7 +88,6 @@ disp('Actual optimal value')
 disp(cvx_optval)
 
 %% Projected Gradient Descent
-
 alpha_0 = rand([n 1]);
 alpha = alpha_hat.*alpha_0; % Start the optimization close to solution form cvx
 
@@ -160,20 +159,22 @@ plot(0:num_iter, primal_hist - dual_hist, 'lineWidth', 2);
 xlabel('Iteration')
 ylabel('$p - d$', 'interpreter', 'latex')
 
-
 %% 4. Investigation of optimization algorithms
 addpath('C:\Users\hans\Documents\Tokyo Tech\Machine Learning\liblinear-2.30\windows');
 addpath('C:\Users\hans\Documents\Tokyo Tech\Machine Learning\libsvm-3.23\windows');
 
+% Dual coordinate optimization
 options = '-s 13';
 tic
 model = train(y, sparse(x), [options]);
 toc
 
+% Sequential minimal optimization
 options = '-s 2';
 tic
 model = svmtrain(y, sparse(x), [options]);
 toc
+
 %% Extra functions 
 function w = compute_w(alpha, y, x, lambda)
     w = 1/(2*lambda)*x'*(alpha.*y);
